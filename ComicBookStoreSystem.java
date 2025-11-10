@@ -10,19 +10,48 @@ public class ComicBookStoreSystem {
     public static void main(String[] args) {
         while (true) {
             System.out.println("\n=== Comic Book Store System ===");
+            System.out.println("1. Admin Login");
+            System.out.println("2. Customer Login");
+            System.out.println("3. Exit");
+            System.out.print("Select option: ");
+            int choice = sc.nextInt(); sc.nextLine();
+
+            switch (choice) {
+                case 1 -> adminMenu();
+                case 2 -> customerMenu();
+                case 3 -> { System.out.println("Exiting..."); return; }
+                default -> System.out.println("Invalid option!");
+            }
+        }
+    }
+
+    private static void adminMenu() {
+        while (true) {
+            System.out.println("\n=== Admin Menu ===");
             System.out.println("1. Manage Comics");
             System.out.println("2. Manage Customers");
-            System.out.println("3. Exit");
+            System.out.println("3. Back to Main Menu");
             System.out.print("Select option: ");
             int choice = sc.nextInt(); sc.nextLine();
 
             switch (choice) {
                 case 1 -> manageComics();
                 case 2 -> manageCustomers();
-                case 3 -> { System.out.println("Exiting..."); return; }
+                case 3 -> { return; }
                 default -> System.out.println("Invalid option!");
             }
         }
+    }
+
+    private static void customerMenu() {
+        System.out.println("\n=== Customer Menu ===");
+        System.out.println("Customer features are coming soon!");
+        System.out.println("This area will allow customers to:");
+        System.out.println("- Browse available comics");
+        System.out.println("- Make purchases");
+        System.out.println("- View order history");
+        System.out.println("Press Enter to return to main menu...");
+        sc.nextLine();
     }
 
     private static void manageComics() {
