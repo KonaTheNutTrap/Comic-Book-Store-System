@@ -27,7 +27,6 @@ public class Customer extends Person {
 
     /**
      * Gets the contact information of the customer.
-     * 
      * @return The customer's contact information
      */
     public String getContact() { return contact; }

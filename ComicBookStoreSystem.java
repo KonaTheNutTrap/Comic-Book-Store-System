@@ -42,13 +42,13 @@ public class ComicBookStoreSystem {
 
             // Route to appropriate menu based on user selection
             switch (choice) {
-                case 1 -> adminMenu();        // Navigate to admin management interface
-                case 2 -> customerMenu();     // Navigate to customer interface
-                case 3 -> { 
+                case 1  : adminMenu(); break;        // Navigate to admin management interface
+                case 2  : customerMenu(); break;     // Navigate to customer interface
+                case 3  :  { 
                     System.out.println("Exiting..."); 
                     return; // Exit the application
                 }
-                default -> System.out.println("Invalid option!"); // Handle invalid input
+                default : System.out.println("Invalid option!"); break; // Handle invalid input
             }
         }
     }
@@ -69,10 +69,10 @@ public class ComicBookStoreSystem {
 
             // Route to appropriate management module
             switch (choice) {
-                case 1 -> manageComics();      // Navigate to comic management
-                case 2 -> manageCustomers();   // Navigate to customer management
-                case 3 -> { return; }          // Return to main menu
-                default -> System.out.println("Invalid option!");
+                case 1 : manageComics(); break;      // Navigate to comic management
+                case 2 : manageCustomers(); break;   // Navigate to customer management
+                case 3 : { return; }          // Return to main menu
+                default : System.out.println("Invalid option!"); break;
             }
         }
     }
@@ -109,25 +109,27 @@ public class ComicBookStoreSystem {
 
             // Execute comic operation based on user selection
             switch (choice) {
-                case 1 -> comicManager.addComic(sc); // Add new comic to inventory
-                case 2 -> comicManager.displayAll(Comic::display); // Display all comics using method reference
-                case 3 -> {
+                case 1 : comicManager.addComic(sc); break; // Add new comic to inventory
+                case 2 : comicManager.displayAll(Comic::display); break; // Display all comics using method reference
+                case 3 : {
                     // Update existing comic - first display all, then select by ID
                     comicManager.displayAll(Comic::display);
                     System.out.print("Enter ID to update: ");
                     int id = sc.nextInt(); sc.nextLine();
                     comicManager.update(id, sc);
+                    break;
                 }
-                case 4 -> {
+                case 4 : {
                     // Delete comic - first display all, then select by ID
                     comicManager.displayAll(Comic::display);
                     System.out.print("Enter ID to delete: ");
                     int id = sc.nextInt(); sc.nextLine();
                     comicManager.delete(id);
                     System.out.println("Deleted successfully!");
+                    break;
                 }
-                case 5 -> { return; } // Return to admin menu
-                default -> System.out.println("Invalid option!");
+                case 5 : { return; } // Return to admin menu
+                default : System.out.println("Invalid option!"); break;
             }
         }
     }
@@ -149,25 +151,27 @@ public class ComicBookStoreSystem {
 
             // Execute customer operation based on user selection
             switch (choice) {
-                case 1 -> customerManager.addCustomer(sc); // Add new customer to database
-                case 2 -> customerManager.displayAll(Customer::display); // Display all customers using method reference
-                case 3 -> {
+                case 1 : customerManager.addCustomer(sc); break; // Add new customer to database
+                case 2 : customerManager.displayAll(Customer::display); break; // Display all customers using method reference
+                case 3 : {
                     // Update existing customer - first display all, then select by ID
                     customerManager.displayAll(Customer::display);
                     System.out.print("Enter ID to update: ");
                     int id = sc.nextInt(); sc.nextLine();
                     customerManager.update(id, sc);
+                    break;
                 }
-                case 4 -> {
+                case 4 : {
                     // Delete customer - first display all, then select by ID
                     customerManager.displayAll(Customer::display);
                     System.out.print("Enter ID to delete: ");
                     int id = sc.nextInt(); sc.nextLine();
                     customerManager.delete(id);
                     System.out.println("Deleted successfully!");
+                    break;
                 }
-                case 5 -> { return; } // Return to admin menu
-                default -> System.out.println("Invalid option!");
+                case 5 : { return; } // Return to admin menu
+                default : System.out.println("Invalid option!"); break;
             }
         }
     }
