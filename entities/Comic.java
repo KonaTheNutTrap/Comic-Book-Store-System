@@ -20,7 +20,7 @@ public class Comic {
     // Author/creator of the comic book 
     private String author;
     
-    // Price of the comic book in Dollars
+    // Price of the comic book in pesos
     private double price;
 
     /**
@@ -29,7 +29,7 @@ public class Comic {
      * @param id The unique identifier for the comic
      * @param title The title of the comic book
      * @param author The author/creator of the comic book
-     * @param price The price of the comic book in Dollars
+     * @param price The price of the comic book in pesos
      */
     public Comic(int id, String title, String author, double price) {
         this.id = id;
@@ -62,7 +62,7 @@ public class Comic {
     /**
      * Gets the price of the comic.
      * 
-     * @return The comic's price in dollars
+     * @return The comic's price in pesos
      */
     public double getPrice() { return price; }
 
@@ -83,7 +83,7 @@ public class Comic {
     /**
      * Sets the price of the comic.
      * 
-     * @param price The new price for the comic in dollars
+     * @param price The new price for the comic in pesos
      */
     public void setPrice(double price) { this.price = price; }
 
@@ -118,6 +118,6 @@ public class Comic {
      * @return Formatted string for display purposes
      */
     public String display() {
-        return "ID: " + id + " | Title: " + title + " | Author: " + author + " | Price: $" + price;
+        return "ID: " + id + " | Title: " + title + " | Author: " + author + " | Price: P" + price;
     }
 }
