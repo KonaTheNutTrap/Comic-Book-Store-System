@@ -20,7 +20,7 @@ public class Comic {
     // Author/creator of the comic book 
     private String author;
     
-    // Price of the comic book in pesos
+    // Price of the comic book in Dollars
     private double price;
 
     /**
@@ -29,7 +29,7 @@ public class Comic {
      * @param id The unique identifier for the comic
      * @param title The title of the comic book
      * @param author The author/creator of the comic book
-     * @param price The price of the comic book in pesos
+     * @param price The price of the comic book in Dollars
      */
     public Comic(int id, String title, String author, double price) {
         this.id = id;
