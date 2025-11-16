@@ -62,7 +62,7 @@ public class Comic {
     /**
      * Gets the price of the comic.
      * 
-     * @return The comic's price in dollars
+     * @return The comic's price in pesos
      */
     public double getPrice() { return price; }
 
@@ -83,7 +83,7 @@ public class Comic {
     /**
      * Sets the price of the comic.
      * 
-     * @param price The new price for the comic in dollars
+     * @param price The new price for the comic in pesos
      */
     public void setPrice(double price) { this.price = price; }
 
@@ -118,6 +118,6 @@ public class Comic {
      * @return Formatted string for display purposes
      */
     public String display() {
-        return "ID: " + id + " | Title: " + title + " | Author: " + author + " | Price: $" + price;
+        return "ID: " + id + " | Title: " + title + " | Author: " + author + " | Price: P" + price;
     }
 }
