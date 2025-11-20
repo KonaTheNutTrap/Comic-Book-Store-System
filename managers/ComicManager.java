@@ -56,20 +56,91 @@ public class ComicManager extends EntityManager<Comic> {
 
     /**
      * Updates the fields of a Comic entity based on user input.
-     * Prompts the user for new values for title, author, and price.
+     * Provides specific options for which field to update.
      * 
      * @param c The Comic entity to update
      * @param sc Scanner for reading user input
      */
     @Override
     protected void updateEntity(Comic c, Scanner sc) {
-        System.out.print("Enter new title: ");
-        c.setTitle(sc.nextLine());
-        System.out.print("Enter new author: ");
-        c.setAuthor(sc.nextLine());
-        System.out.print("Enter new price: ");
-        c.setPrice(sc.nextDouble());
-        sc.nextLine(); // Consume the newline after double input
+        boolean updating = true;
+        
+        while (updating) {
+            System.out.println("\n--- Update Comic: " + c.getTitle() + " ---");
+            System.out.println("Select field to update:");
+            System.out.println("1. Title");
+            System.out.println("2. Author");
+            System.out.println("3. Price");
+            System.out.println("4. Genre");
+            System.out.println("5. Year");
+            System.out.println("6. Stocks");
+            System.out.println("7. Finish updating");
+            System.out.print("Enter choice: ");
+            
+            int choice = sc.nextInt();
+            sc.nextLine(); // Consume newline
+            
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new title: ");
+                    c.setTitle(sc.nextLine());
+                    System.out.println("Title updated!");
+                    break;
+                    
+                case 2:
+                    System.out.print("Enter new author: ");
+                    c.setAuthor(sc.nextLine());
+                    System.out.println("Author updated!");
+                    break;
+                    
+                case 3:
+                    boolean validPrice = false;
+                    while (!validPrice) {
+                        try {
+                            System.out.print("Enter new price: ");
+                            double newPrice = sc.nextDouble();
+                            sc.nextLine(); // Consume newline
+                            c.setPrice(newPrice);
+                            System.out.println("Price updated!");
+                            validPrice = true;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error: " + e.getMessage());
+                        }
+                    }
+                    break;
+                    
+                case 4:
+                    System.out.print("Enter new genre: ");
+                    c.setGenre(sc.nextLine());
+                    System.out.println("Genre updated!");
+                    break;
+                    
+                case 5:
+                    System.out.print("Enter new publication year: ");
+                    int newYear = sc.nextInt();
+                    sc.nextLine(); // Consume newline
+                    c.setYear(newYear);
+                    System.out.println("Year updated!");
+                    break;
+                    
+                case 6:
+                    System.out.print("Enter new stock quantity: ");
+                    int newStocks = sc.nextInt();
+                    sc.nextLine(); // Consume newline
+                    c.setStocks(newStocks);
+                    System.out.println("Stocks updated!");
+                    break;
+                    
+                case 7:
+                    updating = false;
+                    System.out.println("Update completed!");
+                    break;
+                    
+                default:
+                    System.out.println("Invalid option! Please try again.");
+                    break;
+            }
+        }
     }
 
     /**
@@ -84,12 +155,37 @@ public class ComicManager extends EntityManager<Comic> {
         String title = sc.nextLine();
         System.out.print("Enter author: ");
         String author = sc.nextLine();
-        System.out.print("Enter price: ");
-        double price = sc.nextDouble();
-        sc.nextLine(); // Consume the newline after double input
+        
+        double price = 0;
+        boolean validPrice = false;
+        while (!validPrice) {
+            try {
+                System.out.print("Enter price: ");
+                price = sc.nextDouble();
+                sc.nextLine(); // Consume the newline after double input
+                if (price <= 0) {
+                    throw new IllegalArgumentException("Price must be greater than 0");
+                }
+                validPrice = true;
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+                sc.nextLine(); // Clear invalid input
+            }
+        }
+        
+        System.out.print("Enter genre: ");
+        String genre = sc.nextLine();
+        
+        System.out.print("Enter publication year: ");
+        int year = sc.nextInt();
+        sc.nextLine(); // Consume newline
+        
+        System.out.print("Enter stock quantity: ");
+        int stocks = sc.nextInt();
+        sc.nextLine(); // Consume newline
         
         // Create new comic with auto-generated ID and add to collection
-        add(new Comic(nextId(), title, author, price));
+        add(new Comic(nextId(), title, author, price, genre, year, stocks));
         System.out.println("Comic added!");
     }
 }
