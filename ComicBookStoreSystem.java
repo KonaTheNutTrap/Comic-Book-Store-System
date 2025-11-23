@@ -3,7 +3,7 @@ import managers.*;
 import entities.*;
 //import java.io.*;
 
-/**
+/*
  * Comic Book Store System - Main Application Class
  * 
  * This application provides a console-based interface for managing a comic book store.
@@ -23,7 +23,8 @@ public class ComicBookStoreSystem {
     
     // Manager instances for handling comic and customer data
     private static ComicManager comicManager = new ComicManager("data/comics.txt");
-    private static CustomerManager customerManager = new CustomerManager("data/customers.txt");
+  //  private static CustomerManager customerManager = new CustomerManager("data/customers.txt");
+    private static PurchaseManager purchaseManager = new PurchaseManager("data/orders.txt", comicManager);
 
     /**
      * Main entry point of the Comic Book Store System application.
@@ -35,16 +36,17 @@ public class ComicBookStoreSystem {
         // Main application loop - continues until user chooses to exit
         while (true) {
             System.out.println("\n=== Comic Book Store System ===");
-            System.out.println("1. Admin Login");
-            System.out.println("2. Customer Login");
+            System.out.println("1. Manage Inventory");
+            System.out.println("2. Manage Store Purchases");
             System.out.println("3. Exit");
             System.out.print("Select option: ");
-            int choice = sc.nextInt(); sc.nextLine(); 
+            int choice = sc.nextInt(); sc.nextLine();
+            
 
             // Route to appropriate menu based on user selection
             switch (choice) {
                 case 1  : adminMenu(); break;        // Navigate to admin management interface
-                case 2  : customerMenu(); break;     // Navigate to customer interface
+                case 2  : manageCart(); break;     // Navigate to customer interface
                 case 3  :  { 
                     System.out.println("Exiting..."); 
                     return; // Exit the application
@@ -67,31 +69,26 @@ public class ComicBookStoreSystem {
             System.out.println("3. Back to Main Menu");
             System.out.print("Select option: ");
             int choice = sc.nextInt(); sc.nextLine();
+         
 
             // Route to appropriate management module
             switch (choice) {
                 case 1 : manageComics(); break;      // Navigate to comic management
-                case 2 : manageCustomers(); break;   // Navigate to customer management
-                case 3 : { return; }          // Return to main menu
+                
+                case 2 : { return; }          // Return to main menu
                 default : System.out.println("Invalid option!"); break;
             }
         }
     }
 
-    /**
-     * Customer Interface Menu - Placeholder for customer functionality.
-     * Currently displays planned features and returns to main menu.
-     * Future implementation will include browsing, purchasing, and order history.
-     */
-    private static void customerMenu() {
-        System.out.println("\n=== Customer Menu ===");
-        System.out.println("Customer features");
-        System.out.println("Browse available comics");
-        System.out.println("Make purchases");
-        System.out.println("View order history");
-        System.out.println("Press Enter to return to main menu...");
-        sc.nextLine(); // Wait for user input before returning
-    }
+        
+
+
+
+
+
+
+
 
     /**
      * Comic Management Module - Handles all comic-related operations.
@@ -107,6 +104,7 @@ public class ComicBookStoreSystem {
             System.out.println("5. Back");
             System.out.print("Enter choice: ");
             int choice = sc.nextInt(); sc.nextLine();
+         
 
             // Execute comic operation based on user selection
             switch (choice) {
@@ -135,45 +133,62 @@ public class ComicBookStoreSystem {
         }
     }
 
-    /**
-     * Customer Management Module - Handles all customer-related operations.
-     */
-    private static void manageCustomers() {
-        // Customer management loop - continues until user returns to admin menu
-        while (true) {
-            System.out.println("\n--- Manage Customers ---");
-            System.out.println("1. Add Customer");
-            System.out.println("2. Display Customers");
-            System.out.println("3. Update Customer");
-            System.out.println("4. Delete Customer");
-            System.out.println("5. Back");
-            System.out.print("Enter choice: ");
-            int choice = sc.nextInt(); sc.nextLine();
 
-            // Execute customer operation based on user selection
-            switch (choice) {
-                case 1 : customerManager.addCustomer(sc); break; // Add new customer to database
-                case 2 : customerManager.displayAll(Customer::display); break; // Display all customers using method reference
-                case 3 : {
-                    // Update existing customer - first display all, then select by ID
-                    customerManager.displayAll(Customer::display);
-                    System.out.print("Enter ID to update: ");
-                    int id = sc.nextInt(); sc.nextLine();
-                    customerManager.update(id, sc);
-                    break;
-                }
-                case 4 : {
-                    // Delete customer - first display all, then select by ID
-                    customerManager.displayAll(Customer::display);
-                    System.out.print("Enter ID to delete: ");
-                    int id = sc.nextInt(); sc.nextLine();
-                    customerManager.delete(id);
-                    System.out.println("Deleted successfully!");
-                    break;
-                }
-                case 5 : { return; } // Return to admin menu
-                default : System.out.println("Invalid option!"); break;
-            }
+
+
+    private static void manageCart() {
+        while (true) {
+            System.out.println("===Ordering Menu===");
+        System.out.println("1. Add to Cart");
+        System.out.println("2. View Cart");
+        System.out.println("3. Remove Item from Cart");
+        System.out.println("4. Checkout");
+        System.out.println("5. Exit");
+        System.out.print("What would you like to do? ");
+        int choice = sc.nextInt();
+        sc.nextLine(); 
+      
+
+        switch(choice) {
+            case 1: 
+            System.out.print("Enter Comic ID: ");
+            int comicId = sc.nextInt();
+            sc.nextLine();
+            System.out.print("Enter Quantity: ");
+            int qty = sc.nextInt();
+            sc.nextLine();
+
+            purchaseManager.addOrder(comicId, qty);
+            break;
+
+            case 2: purchaseManager.viewOrders();
+
+            break;
+    
+            case 5: return;
+
+            default : System.out.println("Please pick from one of the choices!");
+            
         }
+        
+    
     }
+
 }
+}
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+     
