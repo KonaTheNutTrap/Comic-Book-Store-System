@@ -74,8 +74,7 @@ public class InventoryManager extends EntityManager<Stock> {
             System.out.print("Enter choice: ");
 
             int choice = sc.nextInt();
-            sc.nextLine(); // Consume newline
-
+            sc.nextLine(); 
             switch (choice) {
                 case 1:
                     boolean validQuantity = false;
@@ -83,7 +82,7 @@ public class InventoryManager extends EntityManager<Stock> {
                         try {
                             System.out.print("Enter new quantity: ");
                             int newQuantity = sc.nextInt();
-                            sc.nextLine(); // Consume newline
+                            sc.nextLine(); 
                             s.setQuantity(newQuantity);
                             System.out.println("Quantity updated!");
                             validQuantity = true;
@@ -99,7 +98,7 @@ public class InventoryManager extends EntityManager<Stock> {
                         try {
                             System.out.print("Enter amount to add: ");
                             int addAmount = sc.nextInt();
-                            sc.nextLine(); // Consume newline
+                            sc.nextLine(); 
                             s.addStock(addAmount);
                             System.out.println("Stock added! New quantity: " + s.getQuantity());
                             validAdd = true;
@@ -115,7 +114,7 @@ public class InventoryManager extends EntityManager<Stock> {
                         try {
                             System.out.print("Enter amount to remove: ");
                             int removeAmount = sc.nextInt();
-                            sc.nextLine(); // Consume newline
+                            sc.nextLine(); 
                             s.removeStock(removeAmount);
                             System.out.println("Stock removed! New quantity: " + s.getQuantity());
                             validRemove = true;
@@ -147,7 +146,7 @@ public class InventoryManager extends EntityManager<Stock> {
     public void addStock(Scanner sc) {
         System.out.print("Enter comic ID: ");
         int comicId = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        sc.nextLine(); 
 
         // Check if stock already exists for this comic
         if (findByComicId(comicId) != null) {
@@ -162,7 +161,7 @@ public class InventoryManager extends EntityManager<Stock> {
             try {
                 System.out.print("Enter initial quantity: ");
                 quantity = sc.nextInt();
-                sc.nextLine(); // Consume newline
+                sc.nextLine(); 
                 if (quantity < 0) {
                     throw new IllegalArgumentException("Quantity cannot be negative");
                 }

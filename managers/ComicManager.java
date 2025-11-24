@@ -77,7 +77,7 @@ public class ComicManager extends EntityManager<Comic> {
             System.out.print("Enter choice: ");
             
             int choice = sc.nextInt();
-            sc.nextLine(); // Consume newline
+            sc.nextLine(); 
             
             switch (choice) {
                 case 1:
@@ -98,7 +98,7 @@ public class ComicManager extends EntityManager<Comic> {
                         try {
                             System.out.print("Enter new price: ");
                             double newPrice = sc.nextDouble();
-                            sc.nextLine(); // Consume newline
+                            sc.nextLine(); 
                             c.setPrice(newPrice);
                             System.out.println("Price updated!");
                             validPrice = true;
@@ -117,7 +117,7 @@ public class ComicManager extends EntityManager<Comic> {
                 case 5:
                     System.out.print("Enter new publication year: ");
                     int newYear = sc.nextInt();
-                    sc.nextLine(); // Consume newline
+                    sc.nextLine(); 
                     c.setYear(newYear);
                     System.out.println("Year updated!");
                     break;
@@ -169,7 +169,7 @@ public class ComicManager extends EntityManager<Comic> {
         
         System.out.print("Enter publication year: ");
         int year = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        sc.nextLine(); 
         
         // Create new comic with auto-generated ID and add to collection
         add(new Comic(nextId(), title, author, price, genre, year));
