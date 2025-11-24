@@ -10,19 +10,20 @@ import entities.*;
  * It supports two types of users: Admin and Customer, with different levels of access.
  * 
  * Features:
- * - Admin: Manage comics and customer records (CRUD operations)
- * - Customer: Browse comics and make purchases (placeholder)
+ * - Admin: Manage comics and inventory (CRUD operations)
+ * - Customer: Browse comics and make purchases
  * - Data persistence using text files
  * 
  * @author Comic Book Store System
- * @version 1.0
+ * @version 2.0
  */
 public class ComicBookStoreSystem {
     // Scanner for user input throughout the application
     private static Scanner sc = new Scanner(System.in);
     
-    // Manager instances for handling comic and customer data
+    // Manager instances for handling comic and inventory data
     private static ComicManager comicManager = new ComicManager("data/comics.txt");
+    private static InventoryManager inventoryManager = new InventoryManager("data/stocks.txt");
   //  private static CustomerManager customerManager = new CustomerManager("data/customers.txt");
     private static PurchaseManager purchaseManager = new PurchaseManager("data/orders.txt", comicManager);
 
@@ -65,7 +66,7 @@ public class ComicBookStoreSystem {
         while (true) {
             System.out.println("\n=== Admin Menu ===");
             System.out.println("1. Manage Comics");
-            System.out.println("2. Manage Customers");
+            System.out.println("2. Manage Stocks");
             System.out.println("3. Back to Main Menu");
             System.out.print("Select option: ");
             int choice = sc.nextInt(); sc.nextLine();
@@ -74,21 +75,12 @@ public class ComicBookStoreSystem {
             // Route to appropriate management module
             switch (choice) {
                 case 1 : manageComics(); break;      // Navigate to comic management
-                
-                case 2 : { return; }          // Return to main menu
+                case 2 : manageInventory(); break;   // Navigate to inventory management
+                case 3 : { return; }          // Return to main menu
                 default : System.out.println("Invalid option!"); break;
             }
         }
     }
-
-        
-
-
-
-
-
-
-
 
     /**
      * Comic Management Module - Handles all comic-related operations.
@@ -133,8 +125,60 @@ public class ComicBookStoreSystem {
         }
     }
 
+    /**
+     * Inventory Management Module - Handles all inventory-related operations.
+     */
+    private static void manageInventory() {
+        // Inventory management loop - continues until user returns to admin menu
+        while (true) {
+            System.out.println("\n--- Manage Inventory ---");
+            System.out.println("1. Add Stock Record");
+            System.out.println("2. Display All Stock Records");
+            System.out.println("3. Update Stock Record");
+            System.out.println("4. Delete Stock Record");
+            System.out.println("5. Check Stock for Comic");
+            System.out.println("6. Back");
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt(); sc.nextLine();
 
-
+            switch (choice) {
+                case 1:
+                    inventoryManager.addStock(sc);
+                    break;
+                case 2:
+                    inventoryManager.displayAll(comicManager);
+                    break;
+                case 3:
+                    inventoryManager.displayAll(comicManager);
+                    System.out.print("Enter Stock ID to update: ");
+                    int id = sc.nextInt(); sc.nextLine();
+                    inventoryManager.update(id, sc);
+                    break;
+                case 4:
+                    inventoryManager.displayAll(comicManager);
+                    System.out.print("Enter Stock ID to delete: ");
+                    int deleteId = sc.nextInt(); sc.nextLine();
+                    inventoryManager.delete(deleteId);
+                    System.out.println("Deleted successfully!");
+                    break;
+                case 5:
+                    System.out.print("Enter Comic ID to check stock: ");
+                    int comicId = sc.nextInt(); sc.nextLine();
+                    int quantity = inventoryManager.getStockQuantity(comicId);
+                    if (quantity >= 0) {
+                        System.out.println("Current stock: " + quantity);
+                    } else {
+                        System.out.println("No stock record found for comic ID: " + comicId);
+                    }
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid option!");
+                    break;
+            }
+        }
+    }
 
     private static void manageCart() {
         while (true) {
@@ -176,19 +220,3 @@ public class ComicBookStoreSystem {
 
 }
 }
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-     

@@ -73,8 +73,7 @@ public class ComicManager extends EntityManager<Comic> {
             System.out.println("3. Price");
             System.out.println("4. Genre");
             System.out.println("5. Year");
-            System.out.println("6. Stocks");
-            System.out.println("7. Finish updating");
+            System.out.println("6. Finish updating");
             System.out.print("Enter choice: ");
             
             int choice = sc.nextInt();
@@ -124,14 +123,6 @@ public class ComicManager extends EntityManager<Comic> {
                     break;
                     
                 case 6:
-                    System.out.print("Enter new stock quantity: ");
-                    int newStocks = sc.nextInt();
-                    sc.nextLine(); // Consume newline
-                    c.setStocks(newStocks);
-                    System.out.println("Stocks updated!");
-                    break;
-                    
-                case 7:
                     updating = false;
                     System.out.println("Update completed!");
                     break;
@@ -180,12 +171,8 @@ public class ComicManager extends EntityManager<Comic> {
         int year = sc.nextInt();
         sc.nextLine(); // Consume newline
         
-        System.out.print("Enter stock quantity: ");
-        int stocks = sc.nextInt();
-        sc.nextLine(); // Consume newline
-        
         // Create new comic with auto-generated ID and add to collection
-        add(new Comic(nextId(), title, author, price, genre, year, stocks));
+        add(new Comic(nextId(), title, author, price, genre, year));
         System.out.println("Comic added!");
     }
 }
