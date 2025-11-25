@@ -24,7 +24,6 @@ public class ComicBookStoreSystem {
     // Manager instances for handling comic and inventory data
     private static ComicManager comicManager = new ComicManager("data/comics.txt");
     private static InventoryManager inventoryManager = new InventoryManager("data/stocks.txt");
-  //  private static CustomerManager customerManager = new CustomerManager("data/customers.txt");
     private static PurchaseManager purchaseManager = new PurchaseManager("data/orders.txt", comicManager);
 
     /**
@@ -182,7 +181,7 @@ public class ComicBookStoreSystem {
 
     private static void manageCart() {
         while (true) {
-            System.out.println("===Ordering Menu===");
+        System.out.println("===Ordering Menu===");
         System.out.println("1. Add to Cart");
         System.out.println("2. View Cart");
         System.out.println("3. Remove Item from Cart");
@@ -195,20 +194,32 @@ public class ComicBookStoreSystem {
 
         switch(choice) {
             case 1: 
-            System.out.print("Enter Comic ID: ");
-            int comicId = sc.nextInt();
-            sc.nextLine();
-            System.out.print("Enter Quantity: ");
+            System.out.print("Enter Comic Title: ");
+            String comicTitle = sc.nextLine();
+
+            System.out.print("Enter the Amount/Quantity: ");
+
             int qty = sc.nextInt();
             sc.nextLine();
 
-            purchaseManager.addOrder(comicId, qty);
+            purchaseManager.addOrder(comicTitle, qty);
             break;
 
             case 2: purchaseManager.viewOrders();
 
             break;
-    
+
+            case 3: 
+            purchaseManager.viewOrders();
+            System.out.print("Enter the ID of the comic you would like to remove: ");
+            String c = sc.nextLine();
+
+            purchaseManager.removeOrder(c);
+            sc.nextLine();
+            break;
+
+            case 4: purchaseManager.checkout();
+
             case 5: return;
 
             default : System.out.println("Please pick from one of the choices!");
