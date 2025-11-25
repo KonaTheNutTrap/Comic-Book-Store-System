@@ -78,6 +78,11 @@ public class ComicBookStoreSystem {
      * @param args Command line arguments (not used)
      */
     public static void main(String[] args) {
+        if (!adminLogin()) {
+            System.out.println("Access denied. Exiting program...");
+            return;
+        }
+        
         // Main application loop - continues until user chooses to exit
         while (true) {
             System.out.println("\n=== Comic Book Store System ===");
@@ -90,13 +95,13 @@ public class ComicBookStoreSystem {
 
             // Route to appropriate menu based on user selection
             switch (choice) {
-                case 1  : adminMenu(); break;        // Navigate to admin management interface
-                case 2  : manageCart(); break;     // Navigate to customer interface
-                case 3  :  { 
-                    System.out.println("Exiting..."); 
-                    return; // Exit the application
+                case 1: adminMenu(); break;
+                case 2: manageCart(); break;
+                case 3: {
+                    System.out.println("Exiting...");
+                    return;
                 }
-                default : System.out.println("Invalid option!"); break; // Handle invalid input
+                default: System.out.println("Invalid option!"); break;
             }
         }
     }
