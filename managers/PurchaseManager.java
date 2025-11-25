@@ -1,55 +1,17 @@
 package managers;
 import entities.Comic;
 import entities.Order;
+
 import java.util.*;
+
 
 
 
 public class PurchaseManager extends EntityManager<Order> {
     ArrayList<Order> cart = new ArrayList<>();
-    ComicManager comMan;
+    ComicManager comicManager;
 
-
-    public PurchaseManager(String filename, ComicManager comMan) {
-        super(filename);
-        this.comMan = comMan;
-    }
-
-    public void addOrder(int ComicId, int quantity) {
-        Comic comic = comMan.findById(ComicId);
-        if (comic == null) {
-            System.out.println("Comic not found!");
-            return;
-        } else { 
-            Order newOrder = new Order(comic, quantity);
-            cart.add(newOrder);
-            System.out.println("Added to cart!");
-        }
-    }
-
-    public void viewOrders() {
-        System.out.println("==Your Shopping Cart==");
-        if (cart.isEmpty()) {
-            System.out.println("Im sorry, cart is currently empty!");
-            return;
-        }
-
-        for (Order order : cart) {
-            System.out.println(order.toString());
-        }
-    }
-
-    public void removeOrder() {
-
-    }
-
-    public void checkout() {
-
-    }
-
-
-
-
+    //Abstract methods that must be implemented because of inheriting from a abstract class
     @Override
     protected Order parse(String line) { return null; }
 
@@ -61,7 +23,86 @@ public class PurchaseManager extends EntityManager<Order> {
 
     @Override
     protected void updateEntity(Order entity, Scanner sc) { }
+
+    @Override
+    public void add(Order entity) {
+        entities.add(entity);
+        save(); // Persist changes to file
+    }
     
 
- 
+    public PurchaseManager(String filename, ComicManager comicManager) {
+         
+        super(filename);
+        this.comicManager = comicManager; 
+    }
+
+
+
+    public void addOrder(String comicTitle, int quantity) {
+        Comic comic;
+        
+        comic = comicManager.findByName(comicTitle);
+        
+        if (comic == null) {
+            System.out.println("Comic not found!");
+            return;
+        } else { 
+            Order newOrder = new Order(comic, quantity);
+            cart.add(newOrder);
+            System.out.println("Added to cart!");
+        }
+    }
+
+
+
+
+
+    public void viewOrders() {
+        System.out.println("==Your Shopping Cart==");
+        if (cart.isEmpty()) {
+            System.out.println("Cart is currently empty");
+            return;
+        }
+
+        for (Order order : cart) {
+            System.out.println(order.toString());
+            System.out.println("================================");
+        }
+
+
+    }
+
+    public void removeOrder(String c) {
+
+        if (cart.isEmpty()) {
+            System.out.println("There's nothing to remove because the cart is empty.");
+            return;
+        } else {
+
+        cart.removeIf(o-> o.getComic().getTitle().equalsIgnoreCase(c));
+
+        }
+
+        }
+
+
+    public void checkout() {
+
+
+
+        for (Order order : cart) {
+            System.out.println("===Receipt===");
+            System.out.println(order.toString());
+            add(order);
+            
+            
+        }      
+
+
+
+    }
+
+
+
 }

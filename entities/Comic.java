@@ -54,7 +54,8 @@ public class Comic {
      * @return The comic's ID
      */
     public int getId() { return id; }
-    
+
+    public String getName() { return title; }
     /**
      * Gets the title of the comic.
      * 

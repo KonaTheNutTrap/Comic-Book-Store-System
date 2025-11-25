@@ -59,6 +59,8 @@ public abstract class EntityManager<T> {
      * @return The entity's ID
      */
     protected abstract int getId(T entity);
+
+
     
     /**
      * Abstract method to update an entity's fields.
@@ -108,6 +110,8 @@ public abstract class EntityManager<T> {
                 return e;
         return null; // Entity not found
     }
+
+
 
     /**
      * Updates an entity by its ID with new values from user input.

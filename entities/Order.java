@@ -2,8 +2,6 @@ package entities;
 
 
 
-
-
 public class Order {
     private Comic comic;
     private int quantity;

@@ -134,6 +134,15 @@ public class ComicManager extends EntityManager<Comic> {
         }
     }
 
+    //Find an entity by its name
+    public Comic findByName(String Title) {
+        for (Comic e : entities) 
+            if (e.getTitle().equals(Title)) 
+                return e;
+
+        return null;
+    }
+
     /**
      * Interactive method to add a new comic to the collection.
      * Prompts the user for comic details and creates a new Comic instance.
