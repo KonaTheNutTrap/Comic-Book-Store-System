@@ -4,8 +4,8 @@ package entities;
  * Comic entity class representing a comic book in the Comic Book Store System.
  * 
  * This class models the core product of the store, containing attributes
- * for identification, description, and pricing. It implements serialization
- * and deserialization methods for file storage.
+ * for identification, description, and pricing. Stock management is now
+ * handled separately by the Stock entity and InventoryManager.
  * 
  * @author Comic Book Store System
  * @version 1.0
@@ -28,9 +28,6 @@ public class Comic {
     
     // Publication year of the comic book
     private int year;
-    
-    // Number of copies available in stock
-    private int stocks;
 
     /**
      * Constructor for creating a Comic instance.
@@ -41,16 +38,14 @@ public class Comic {
      * @param price The price of the comic book in pesos
      * @param genre The genre of the comic book
      * @param year The publication year of the comic book
-     * @param stocks The number of copies available in stock
      */
-    public Comic(int id, String title, String author, double price, String genre, int year, int stocks) {
+    public Comic(int id, String title, String author, double price, String genre, int year) {
         this.id = id;
         this.title = title;
         this.author = author;
         setPrice(price); // Use setter for validation
         this.genre = genre;
         this.year = year;
-        this.stocks = stocks;
     }
 
     /**
@@ -94,13 +89,6 @@ public class Comic {
      * @return The comic's publication year
      */
     public int getYear() { return year; }
-    
-    /**
-     * Gets the stock quantity of the comic.
-     * 
-     * @return The comic's stock quantity
-     */
-    public int getStocks() { return stocks; }
 
     /**
      * Sets the title of the comic.
@@ -142,23 +130,16 @@ public class Comic {
      * @param year The new publication year for the comic
      */
     public void setYear(int year) { this.year = year; }
-    
-    /**
-     * Sets the stock quantity of the comic.
-     * 
-     * @param stocks The new stock quantity for the comic
-     */
-    public void setStocks(int stocks) { this.stocks = stocks; }
 
     /**
      * Converts the comic to a string representation for file storage.
-     * Uses comma-separated format: id,title,author,price,genre,year,stocks
+     * Uses comma-separated format: id,title,author,price,genre,year
      * 
      * @return String representation suitable for file storage
      */
     @Override
     public String toString() {
-        return id + "," + title + "," + author + "," + price + "," + genre + "," + year + "," + stocks;
+        return id + "," + title + "," + author + "," + price + "," + genre + "," + year;
     }
 
     /**
@@ -166,21 +147,21 @@ public class Comic {
      * This method parses a comma-separated string to reconstruct a Comic object.
      * Used for loading comic data from text files.
      * 
-     * @param line A comma-separated string in the format: id,title,author,price,genre,year,stocks
+     * @param line A comma-separated string in the format: id,title,author,price,genre,year
      * @return Comic object if parsing is successful, null otherwise
      */
     public static Comic fromString(String line) {
         String[] parts = line.split(",");
-        // Handle both old format (4 fields) and new format (7 fields)
+        // Handle both old format (4 fields) and new format (6 fields)
         if (parts.length == 4) {
             // Old format - set default values for new fields
             return new Comic(Integer.parseInt(parts[0]), parts[1], parts[2], 
-                           Double.parseDouble(parts[3]), "Unknown", 2000, 1);
-        } else if (parts.length == 7) {
-            // New format
+                           Double.parseDouble(parts[3]), "Unknown", 2000);
+        } else if (parts.length == 6) {
+            // New format without stocks
             return new Comic(Integer.parseInt(parts[0]), parts[1], parts[2], 
                            Double.parseDouble(parts[3]), parts[4], 
-                           Integer.parseInt(parts[5]), Integer.parseInt(parts[6]));
+                           Integer.parseInt(parts[5]));
         } else {
             return null; // Invalid format
         }
@@ -194,6 +175,6 @@ public class Comic {
     public String display() {
         return "ID: " + id + " | Title: " + title + " | Author: " + author + 
                " | Price: P" + price + " | Genre: " + genre + 
-               " | Year: " + year + " | Stocks: " + stocks;
+               " | Year: " + year;
     }
 }
