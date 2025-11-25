@@ -18,18 +18,17 @@ import entities.*;
  * @version 2.0
  */
 public class ComicBookStoreSystem {
-
     // Scanner for user input throughout the application
     private static Scanner sc = new Scanner(System.in);
-
+    
     // Manager instances for handling comic and inventory data
     private static ComicManager comicManager = new ComicManager("data/comics.txt");
     private static InventoryManager inventoryManager = new InventoryManager("data/stocks.txt");
     private static PurchaseManager purchaseManager = new PurchaseManager("data/orders.txt", comicManager);
 
 
-    //Admin validation
-
+    //  Admin validation
+  
     private static final String ADMIN_FILE = "data/admin.txt";
 
     private static boolean adminLogin() {
@@ -71,20 +70,14 @@ public class ComicBookStoreSystem {
         return false;
     }
 
+
     /**
      * Main entry point of the Comic Book Store System application.
      * Displays the main menu and handles user navigation between different modules.
+     * 
+     * @param args Command line arguments (not used)
      */
     public static void main(String[] args) {
-
-        // =======================
-        // ADDED: Require login first
-        // =======================
-        if (!adminLogin()) {
-            System.out.println("Access denied. Exiting program...");
-            return;
-        }
-
         // Main application loop - continues until user chooses to exit
         while (true) {
             System.out.println("\n=== Comic Book Store System ===");
@@ -92,42 +85,52 @@ public class ComicBookStoreSystem {
             System.out.println("2. Manage Store Purchases");
             System.out.println("3. Exit");
             System.out.print("Select option: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+            int choice = sc.nextInt(); sc.nextLine();
+            
 
             // Route to appropriate menu based on user selection
             switch (choice) {
-                case 1: adminMenu(); break;
-                case 2: manageCart(); break;
-                case 3: {
-                    System.out.println("Exiting...");
-                    return;
+                case 1  : adminMenu(); break;        // Navigate to admin management interface
+                case 2  : manageCart(); break;     // Navigate to customer interface
+                case 3  :  { 
+                    System.out.println("Exiting..."); 
+                    return; // Exit the application
                 }
-                default: System.out.println("Invalid option!"); break;
+                default : System.out.println("Invalid option!"); break; // Handle invalid input
             }
         }
     }
 
+    /**
+     * Admin Management Menu - Provides access to administrative functions.
+     * Allows admin users to manage comic inventory and customer records.
+     */
     private static void adminMenu() {
+        // Admin menu loop - continues until user returns to main menu
         while (true) {
             System.out.println("\n=== Admin Menu ===");
             System.out.println("1. Manage Comics");
             System.out.println("2. Manage Stocks");
             System.out.println("3. Back to Main Menu");
             System.out.print("Select option: ");
-            int choice = sc.nextInt(); 
-            sc.nextLine();
+            int choice = sc.nextInt(); sc.nextLine();
+         
 
+            // Route to appropriate management module
             switch (choice) {
-                case 1: manageComics(); break;
-                case 2: manageInventory(); break;
-                case 3: return;
-                default: System.out.println("Invalid option!"); break;
+                case 1 : manageComics(); break;      // Navigate to comic management
+                case 2 : manageInventory(); break;   // Navigate to inventory management
+                case 3 : { return; }          // Return to main menu
+                default : System.out.println("Invalid option!"); break;
             }
         }
     }
 
+    /**
+     * Comic Management Module - Handles all comic-related operations.
+     */
     private static void manageComics() {
+        // Comic management loop - continues until user returns to admin menu
         while (true) {
             System.out.println("\n--- Manage Comics ---");
             System.out.println("1. Add Comic");
@@ -136,39 +139,51 @@ public class ComicBookStoreSystem {
             System.out.println("4. Delete Comic");
             System.out.println("5. Back");
             System.out.print("Enter choice: ");
-            int choice = sc.nextInt(); 
-            sc.nextLine();
+            int choice = sc.nextInt(); sc.nextLine();
+         
 
+            // Execute comic operation based on user selection
             switch (choice) {
-                case 1:
-                    comicManager.addComic(sc);
-                    break;
-                case 2:
+                case 1 : comicManager.addComic(sc); break; // Add new comic to inventory
+                case 2 : comicManager.displayAll(Comic::display); break; // Display all comics using method reference
+                case 3 : {
+                    // Update existing comic - first display all, then select by ID or title
                     comicManager.displayAll(Comic::display);
+                    System.out.print("Enter ID or title to update: ");
+                    String input = sc.nextLine();
+                    Comic comic = comicManager.findByIdOrName(input);
+                    if (comic != null) {
+                        comicManager.update(comic.getId(), sc);
+                    } else {
+                        System.out.println("Comic not found!");
+                    }
                     break;
-                case 3:
+                }
+                case 4 : {
+                    // Delete comic - first display all, then select by ID or title
                     comicManager.displayAll(Comic::display);
-                    System.out.print("Enter ID to update: ");
-                    int id = sc.nextInt(); sc.nextLine();
-                    comicManager.update(id, sc);
+                    System.out.print("Enter ID or title to delete: ");
+                    String input = sc.nextLine();
+                    Comic comic = comicManager.findByIdOrName(input);
+                    if (comic != null) {
+                        comicManager.delete(comic.getId());
+                        System.out.println("Deleted successfully!");
+                    } else {
+                        System.out.println("Comic not found!");
+                    }
                     break;
-                case 4:
-                    comicManager.displayAll(Comic::display);
-                    System.out.print("Enter ID to delete: ");
-                    int deleteId = sc.nextInt(); sc.nextLine();
-                    comicManager.delete(deleteId);
-                    System.out.println("Deleted successfully!");
-                    break;
-                case 5:
-                    return;
-                default:
-                    System.out.println("Invalid option!");
-                    break;
+                }
+                case 5 : { return; } // Return to admin menu
+                default : System.out.println("Invalid option!"); break;
             }
         }
     }
 
+    /**
+     * Inventory Management Module - Handles all inventory-related operations.
+     */
     private static void manageInventory() {
+        // Inventory management loop - continues until user returns to admin menu
         while (true) {
             System.out.println("\n--- Manage Inventory ---");
             System.out.println("1. Add Stock Record");
@@ -178,12 +193,11 @@ public class ComicBookStoreSystem {
             System.out.println("5. Check Stock for Comic");
             System.out.println("6. Back");
             System.out.print("Enter choice: ");
-            int choice = sc.nextInt(); 
-            sc.nextLine();
+            int choice = sc.nextInt(); sc.nextLine();
 
             switch (choice) {
                 case 1:
-                    inventoryManager.addStock(sc);
+                    inventoryManager.addStock(sc, comicManager);
                     break;
                 case 2:
                     inventoryManager.displayAll(comicManager);
@@ -202,13 +216,18 @@ public class ComicBookStoreSystem {
                     System.out.println("Deleted successfully!");
                     break;
                 case 5:
-                    System.out.print("Enter Comic ID to check stock: ");
-                    int comicId = sc.nextInt(); sc.nextLine();
-                    int quantity = inventoryManager.getStockQuantity(comicId);
-                    if (quantity >= 0) {
-                        System.out.println("Current stock: " + quantity);
+                    System.out.print("Enter Comic ID or title to check stock: ");
+                    String input = sc.nextLine();
+                    Comic comic = comicManager.findByIdOrName(input);
+                    if (comic != null) {
+                        int quantity = inventoryManager.getStockQuantity(comic.getId());
+                        if (quantity >= 0) {
+                            System.out.println("Current stock: " + quantity);
+                        } else {
+                            System.out.println("No stock record found for comic: " + comic.getTitle());
+                        }
                     } else {
-                        System.out.println("No stock record found for comic ID: " + comicId);
+                        System.out.println("Comic not found!");
                     }
                     break;
                 case 6:
@@ -222,35 +241,52 @@ public class ComicBookStoreSystem {
 
     private static void manageCart() {
         while (true) {
-            System.out.println("===Ordering Menu===");
-            System.out.println("1. Add to Cart");
-            System.out.println("2. View Cart");
-            System.out.println("3. Remove Item from Cart");
-            System.out.println("4. Checkout");
-            System.out.println("5. Exit");
-            System.out.print("What would you like to do? ");
-            int choice = sc.nextInt();
+        System.out.println("===Ordering Menu===");
+        System.out.println("1. Add to Cart");
+        System.out.println("2. View Cart");
+        System.out.println("3. Remove Item from Cart");
+        System.out.println("4. Checkout");
+        System.out.println("5. Exit");
+        System.out.print("What would you like to do? ");
+        int choice = sc.nextInt();
+        sc.nextLine(); 
+      
+
+        switch(choice) {
+            case 1:
+            System.out.print("Enter Comic ID or Title: ");
+            String comicInput = sc.nextLine();
+
+            System.out.print("Enter the Amount/Quantity: ");
+
+            int qty = sc.nextInt();
             sc.nextLine();
 
-            switch (choice) {
-                case 1:
-                    System.out.print("Enter Comic ID: ");
-                    int comicId = sc.nextInt(); sc.nextLine();
-                    System.out.print("Enter Quantity: ");
-                    int qty = sc.nextInt(); sc.nextLine();
-                    purchaseManager.addOrder(comicId, qty);
-                    break;
+            purchaseManager.addOrder(comicInput, qty);
+            break;
 
-                case 2:
-                    purchaseManager.viewOrders();
-                    break;
+            case 2: purchaseManager.viewOrders();
 
-                case 5:
-                    return;
+            break;
 
-                default:
-                    System.out.println("Please pick from one of the choices!");
-            }
+            case 3:
+            purchaseManager.viewOrders();
+            System.out.print("Enter the ID or title of the comic you would like to remove: ");
+            String c = sc.nextLine();
+
+            purchaseManager.removeOrder(c);
+            break;
+
+            case 4: purchaseManager.checkout();
+
+            case 5: return;
+
+            default : System.out.println("Please pick from one of the choices!");
+            
         }
+        
+    
     }
+
+}
 }
