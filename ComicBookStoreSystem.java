@@ -26,6 +26,51 @@ public class ComicBookStoreSystem {
     private static InventoryManager inventoryManager = new InventoryManager("data/stocks.txt");
     private static PurchaseManager purchaseManager = new PurchaseManager("data/orders.txt", comicManager);
 
+
+    //  Admin validation
+  
+    private static final String ADMIN_FILE = "data/admin.txt";
+
+    private static boolean adminLogin() {
+        System.out.println("=== Admin Login ===");
+        System.out.print("Username: ");
+        String user = sc.nextLine();
+        System.out.print("Password: ");
+        String pass = sc.nextLine();
+
+        try {
+            java.io.File file = new java.io.File(ADMIN_FILE);
+            if (!file.exists()) {
+                System.out.println("Admin credentials file missing!");
+                return false;
+            }
+
+            Scanner reader = new Scanner(file);
+            if (reader.hasNextLine()) {
+                String[] parts = reader.nextLine().split(",");
+                reader.close();
+
+                if (parts.length == 2) {
+                    String savedUser = parts[0].trim();
+                    String savedPass = parts[1].trim();
+
+                    if (savedUser.equals(user) && savedPass.equals(pass)) {
+                        System.out.println("Login Successful!\n");
+                        return true;
+                    }
+                }
+            }
+
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("Error reading admin file.");
+        }
+
+        System.out.println("Invalid username or password.\n");
+        return false;
+    }
+
+
     /**
      * Main entry point of the Comic Book Store System application.
      * Displays the main menu and handles user navigation between different modules.
