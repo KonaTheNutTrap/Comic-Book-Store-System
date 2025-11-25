@@ -39,15 +39,15 @@ public class PurchaseManager extends EntityManager<Order> {
 
 
 
-    public void addOrder(String comicTitle, int quantity) {
+    public void addOrder(String comicInput, int quantity) {
         Comic comic;
-        
-        comic = comicManager.findByName(comicTitle);
-        
+
+        comic = comicManager.findByIdOrName(comicInput);
+
         if (comic == null) {
             System.out.println("Comic not found!");
             return;
-        } else { 
+        } else {
             Order newOrder = new Order(comic, quantity);
             cart.add(newOrder);
             System.out.println("Added to cart!");
@@ -80,7 +80,20 @@ public class PurchaseManager extends EntityManager<Order> {
             return;
         } else {
 
-        cart.removeIf(o-> o.getComic().getTitle().equalsIgnoreCase(c));
+        // Try to parse as ID, else remove by title
+        boolean removed = false;
+        try {
+            int id = Integer.parseInt(c.trim());
+            removed = cart.removeIf(o -> o.getComic().getId() == id);
+        } catch (NumberFormatException e) {
+            removed = cart.removeIf(o -> o.getComic().getTitle().equalsIgnoreCase(c.trim()));
+        }
+
+        if (removed) {
+            System.out.println("Item removed from cart!");
+        } else {
+            System.out.println("Item not found in cart!");
+        }
 
         }
 

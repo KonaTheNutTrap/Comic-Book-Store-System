@@ -136,11 +136,22 @@ public class ComicManager extends EntityManager<Comic> {
 
     //Find an entity by its name
     public Comic findByName(String Title) {
-        for (Comic e : entities) 
-            if (e.getTitle().equals(Title)) 
+        for (Comic e : entities)
+            if (e.getTitle().equals(Title))
                 return e;
 
         return null;
+    }
+
+    //Find a comic by ID or title
+    public Comic findByIdOrName(String input) {
+        input = input.trim();
+        try {
+            int id = Integer.parseInt(input);
+            return findById(id);
+        } catch (NumberFormatException e) {
+            return findByName(input);
+        }
     }
 
     /**

@@ -102,20 +102,30 @@ public class ComicBookStoreSystem {
                 case 1 : comicManager.addComic(sc); break; // Add new comic to inventory
                 case 2 : comicManager.displayAll(Comic::display); break; // Display all comics using method reference
                 case 3 : {
-                    // Update existing comic - first display all, then select by ID
+                    // Update existing comic - first display all, then select by ID or title
                     comicManager.displayAll(Comic::display);
-                    System.out.print("Enter ID to update: ");
-                    int id = sc.nextInt(); sc.nextLine();
-                    comicManager.update(id, sc);
+                    System.out.print("Enter ID or title to update: ");
+                    String input = sc.nextLine();
+                    Comic comic = comicManager.findByIdOrName(input);
+                    if (comic != null) {
+                        comicManager.update(comic.getId(), sc);
+                    } else {
+                        System.out.println("Comic not found!");
+                    }
                     break;
                 }
                 case 4 : {
-                    // Delete comic - first display all, then select by ID
+                    // Delete comic - first display all, then select by ID or title
                     comicManager.displayAll(Comic::display);
-                    System.out.print("Enter ID to delete: ");
-                    int id = sc.nextInt(); sc.nextLine();
-                    comicManager.delete(id);
-                    System.out.println("Deleted successfully!");
+                    System.out.print("Enter ID or title to delete: ");
+                    String input = sc.nextLine();
+                    Comic comic = comicManager.findByIdOrName(input);
+                    if (comic != null) {
+                        comicManager.delete(comic.getId());
+                        System.out.println("Deleted successfully!");
+                    } else {
+                        System.out.println("Comic not found!");
+                    }
                     break;
                 }
                 case 5 : { return; } // Return to admin menu
@@ -142,7 +152,7 @@ public class ComicBookStoreSystem {
 
             switch (choice) {
                 case 1:
-                    inventoryManager.addStock(sc);
+                    inventoryManager.addStock(sc, comicManager);
                     break;
                 case 2:
                     inventoryManager.displayAll(comicManager);
@@ -161,13 +171,18 @@ public class ComicBookStoreSystem {
                     System.out.println("Deleted successfully!");
                     break;
                 case 5:
-                    System.out.print("Enter Comic ID to check stock: ");
-                    int comicId = sc.nextInt(); sc.nextLine();
-                    int quantity = inventoryManager.getStockQuantity(comicId);
-                    if (quantity >= 0) {
-                        System.out.println("Current stock: " + quantity);
+                    System.out.print("Enter Comic ID or title to check stock: ");
+                    String input = sc.nextLine();
+                    Comic comic = comicManager.findByIdOrName(input);
+                    if (comic != null) {
+                        int quantity = inventoryManager.getStockQuantity(comic.getId());
+                        if (quantity >= 0) {
+                            System.out.println("Current stock: " + quantity);
+                        } else {
+                            System.out.println("No stock record found for comic: " + comic.getTitle());
+                        }
                     } else {
-                        System.out.println("No stock record found for comic ID: " + comicId);
+                        System.out.println("Comic not found!");
                     }
                     break;
                 case 6:
@@ -193,29 +208,28 @@ public class ComicBookStoreSystem {
       
 
         switch(choice) {
-            case 1: 
-            System.out.print("Enter Comic Title: ");
-            String comicTitle = sc.nextLine();
+            case 1:
+            System.out.print("Enter Comic ID or Title: ");
+            String comicInput = sc.nextLine();
 
             System.out.print("Enter the Amount/Quantity: ");
 
             int qty = sc.nextInt();
             sc.nextLine();
 
-            purchaseManager.addOrder(comicTitle, qty);
+            purchaseManager.addOrder(comicInput, qty);
             break;
 
             case 2: purchaseManager.viewOrders();
 
             break;
 
-            case 3: 
+            case 3:
             purchaseManager.viewOrders();
-            System.out.print("Enter the ID of the comic you would like to remove: ");
+            System.out.print("Enter the ID or title of the comic you would like to remove: ");
             String c = sc.nextLine();
 
             purchaseManager.removeOrder(c);
-            sc.nextLine();
             break;
 
             case 4: purchaseManager.checkout();

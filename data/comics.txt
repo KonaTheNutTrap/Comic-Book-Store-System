@@ -1,3 +1,0 @@
-1,My Hero Academia,Boichi,59.0,Shounen,2007
-2,Dr Stone,Boichi,69.0,Isekai,2009
-3,Aziel,Me,300.0,50,2008

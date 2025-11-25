@@ -138,19 +138,27 @@ public class InventoryManager extends EntityManager<Stock> {
     /**
      * Interactive method to add a new stock record to the collection.
      * Prompts the user for stock details and creates a new Stock instance.
-     * Stock ID must equal comic ID 
+     * Stock ID must equal comic ID
      *
      * @param sc Scanner for reading user input
+     * @param comicManager The ComicManager instance to look up comic details
      */
-    public void addStock(Scanner sc) {
-        System.out.print("Enter comic ID: ");
-        int comicId = sc.nextInt();
-        sc.nextLine(); 
+    public void addStock(Scanner sc, ComicManager comicManager) {
+        System.out.print("Enter comic ID or title: ");
+        String input = sc.nextLine();
+
+        // Find comic by ID or title
+        entities.Comic comic = comicManager.findByIdOrName(input);
+        if (comic == null) {
+            System.out.println("Error: Comic not found with ID or title: " + input);
+            return;
+        }
+        int comicId = comic.getId();
 
         // Check if stock already exists for this comic
         if (findByComicId(comicId) != null) {
-            System.out.println("Error: Stock record already exists for comic ID " + comicId +
-                             ". Each comic can have only one stock record.");
+            System.out.println("Error: Stock record already exists for comic '" + comic.getTitle() + "' (ID " + comicId +
+                             "). Each comic can have only one stock record.");
             return;
         }
 
