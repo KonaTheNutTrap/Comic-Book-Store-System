@@ -5,30 +5,28 @@ import entities.*;
 
 /*
  * Comic Book Store System - Main Application Class
- * 
+ *
  * This application provides a console-based interface for managing a comic book store.
  * It supports two types of users: Admin and Customer, with different levels of access.
- * 
+ *
  * Features:
  * - Admin: Manage comics and inventory (CRUD operations)
  * - Customer: Browse comics and make purchases
  * - Data persistence using text files
- * 
+ *
  * @author Comic Book Store System
  * @version 2.0
  */
 public class ComicBookStoreSystem {
     // Scanner for user input throughout the application
     private static Scanner sc = new Scanner(System.in);
-    
+
     // Manager instances for handling comic and inventory data
     private static ComicManager comicManager = new ComicManager("data/comics.txt");
     private static InventoryManager inventoryManager = new InventoryManager("data/stocks.txt");
     private static PurchaseManager purchaseManager = new PurchaseManager("data/orders.txt", comicManager);
 
-
-    //  Admin validation
-  
+    // Admin validation
     private static final String ADMIN_FILE = "data/admin.txt";
 
     private static boolean adminLogin() {
@@ -70,11 +68,10 @@ public class ComicBookStoreSystem {
         return false;
     }
 
-
     /**
      * Main entry point of the Comic Book Store System application.
      * Displays the main menu and handles user navigation between different modules.
-     * 
+     *
      * @param args Command line arguments (not used)
      */
     public static void main(String[] args) {
@@ -82,22 +79,23 @@ public class ComicBookStoreSystem {
             System.out.println("Access denied. Exiting program...");
             return;
         }
-        
+
         // Main application loop - continues until user chooses to exit
         while (true) {
             System.out.println("\n=== Comic Book Store System ===");
             System.out.println("1. Manage Inventory");
             System.out.println("2. Manage Store Purchases");
-            System.out.println("3. Exit");
+            System.out.println("3. Search Comics");
+            System.out.println("4. Exit");
             System.out.print("Select option: ");
             int choice = sc.nextInt(); sc.nextLine();
-            
 
             // Route to appropriate menu based on user selection
             switch (choice) {
                 case 1: adminMenu(); break;
                 case 2: manageCart(); break;
-                case 3: {
+                case 3: searchComics(); break;
+                case 4: {
                     System.out.println("Exiting...");
                     return;
                 }
@@ -119,7 +117,6 @@ public class ComicBookStoreSystem {
             System.out.println("3. Back to Main Menu");
             System.out.print("Select option: ");
             int choice = sc.nextInt(); sc.nextLine();
-         
 
             // Route to appropriate management module
             switch (choice) {
@@ -145,7 +142,6 @@ public class ComicBookStoreSystem {
             System.out.println("5. Back");
             System.out.print("Enter choice: ");
             int choice = sc.nextInt(); sc.nextLine();
-         
 
             // Execute comic operation based on user selection
             switch (choice) {
@@ -246,52 +242,66 @@ public class ComicBookStoreSystem {
 
     private static void manageCart() {
         while (true) {
-        System.out.println("===Ordering Menu===");
-        System.out.println("1. Add to Cart");
-        System.out.println("2. View Cart");
-        System.out.println("3. Remove Item from Cart");
-        System.out.println("4. Checkout");
-        System.out.println("5. Exit");
-        System.out.print("What would you like to do? ");
-        int choice = sc.nextInt();
-        sc.nextLine(); 
-      
-
-        switch(choice) {
-            case 1:
-            System.out.print("Enter Comic ID or Title: ");
-            String comicInput = sc.nextLine();
-
-            System.out.print("Enter the Amount/Quantity: ");
-
-            int qty = sc.nextInt();
+            System.out.println("===Ordering Menu===");
+            System.out.println("1. Add to Cart");
+            System.out.println("2. View Cart");
+            System.out.println("3. Remove Item from Cart");
+            System.out.println("4. Checkout");
+            System.out.println("5. Exit");
+            System.out.print("What would you like to do? ");
+            int choice = sc.nextInt();
             sc.nextLine();
 
-            purchaseManager.addOrder(comicInput, qty);
-            break;
+            switch(choice) {
+                case 1:
+                    System.out.print("Enter Comic ID or Title: ");
+                    String comicInput = sc.nextLine();
 
-            case 2: purchaseManager.viewOrders();
+                    System.out.print("Enter the Amount/Quantity: ");
 
-            break;
+                    int qty = sc.nextInt();
+                    sc.nextLine();
 
-            case 3:
-            purchaseManager.viewOrders();
-            System.out.print("Enter the ID or title of the comic you would like to remove: ");
-            String c = sc.nextLine();
+                    purchaseManager.addOrder(comicInput, qty);
+                    break;
 
-            purchaseManager.removeOrder(c);
-            break;
+                case 2: purchaseManager.viewOrders();
+                    break;
 
-            case 4: purchaseManager.checkout();
+                case 3:
+                    purchaseManager.viewOrders();
+                    System.out.print("Enter the ID or title of the comic you would like to remove: ");
+                    String c = sc.nextLine();
 
-            case 5: return;
+                    purchaseManager.removeOrder(c);
+                    break;
 
-            default : System.out.println("Please pick from one of the choices!");
-            
+                case 4: purchaseManager.checkout();
+                    break;
+
+                case 5: return;
+
+                default : System.out.println("Please pick from one of the choices!");
+
+            }
         }
-        
-    
     }
 
-}
+    /**
+     * Search Comics - Allows users to search for comics by ID or name.
+     * Displays the details of the found comic or shows a "not found" message.
+     */
+    private static void searchComics() {
+        System.out.println("\n=== Search Comics ===");
+        System.out.print("Enter Comic ID or name: ");
+        String input = sc.nextLine();
+
+        Comic comic = comicManager.findByIdOrName(input);
+        if (comic != null) {
+            System.out.println("\nComic Details:");
+            System.out.println(comic.display());
+        } else {
+            System.out.println("Comic not found!");
+        }
+    }
 }
