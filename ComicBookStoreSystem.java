@@ -186,6 +186,9 @@ public class ComicBookStoreSystem {
     private static void manageInventory() {
         // Inventory management loop - continues until user returns to admin menu
         while (true) {
+            // Display low stock dashboard
+            inventoryManager.displayLowStockDashboard(comicManager);
+
             System.out.println("\n--- Manage Inventory ---");
             System.out.println("1. Add Stock Record");
             System.out.println("2. Display All Stock Records");
