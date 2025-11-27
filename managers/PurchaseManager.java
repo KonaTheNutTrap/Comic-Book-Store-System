@@ -47,10 +47,14 @@ public class PurchaseManager extends EntityManager<Order> {
         if (comic == null) {
             System.out.println("Comic not found!");
             return;
-        } else {
+        }
+
+        try {
             Order newOrder = new Order(comic, quantity);
             cart.add(newOrder);
             System.out.println("Added to cart!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -101,21 +105,15 @@ public class PurchaseManager extends EntityManager<Order> {
 
 
     public void checkout() {
-
-
+        if (cart.isEmpty()) {
+            System.out.println("Cart is empty. Nothing to checkout.");
+            return;
+        }
 
         for (Order order : cart) {
             System.out.println("===Receipt===");
             System.out.println(order.toString());
             add(order);
-            
-            
-        }      
-
-
-
+        }
     }
-
-
-
 }

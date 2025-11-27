@@ -1,6 +1,7 @@
 import java.util.*;
 import managers.*;
 import entities.*;
+import java.util.InputMismatchException;
 //import java.io.*;
 
 /*
@@ -87,8 +88,19 @@ public class ComicBookStoreSystem {
             System.out.println("2. Manage Store Purchases");
             System.out.println("3. Search Comics");
             System.out.println("4. Exit");
-            System.out.print("Select option: ");
-            int choice = sc.nextInt(); sc.nextLine();
+
+            int choice = -1;
+            while (true) {
+                try {
+                    System.out.print("Select option: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    sc.nextLine(); // clear invalid input
+                }
+            }
 
             // Route to appropriate menu based on user selection
             switch (choice) {
@@ -115,8 +127,19 @@ public class ComicBookStoreSystem {
             System.out.println("1. Manage Comics");
             System.out.println("2. Manage Stocks");
             System.out.println("3. Back to Main Menu");
-            System.out.print("Select option: ");
-            int choice = sc.nextInt(); sc.nextLine();
+
+            int choice = -1;
+            while (true) {
+                try {
+                    System.out.print("Select option: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    sc.nextLine(); // clear invalid input
+                }
+            }
 
             // Route to appropriate management module
             switch (choice) {
@@ -140,8 +163,19 @@ public class ComicBookStoreSystem {
             System.out.println("3. Update Comic");
             System.out.println("4. Delete Comic");
             System.out.println("5. Back");
-            System.out.print("Enter choice: ");
-            int choice = sc.nextInt(); sc.nextLine();
+
+            int choice = -1;
+            while (true) {
+                try {
+                    System.out.print("Enter choice: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    sc.nextLine(); // clear invalid input
+                }
+            }
 
             // Execute comic operation based on user selection
             switch (choice) {
@@ -196,8 +230,19 @@ public class ComicBookStoreSystem {
             System.out.println("4. Delete Stock Record");
             System.out.println("5. Check Stock for Comic");
             System.out.println("6. Back");
-            System.out.print("Enter choice: ");
-            int choice = sc.nextInt(); sc.nextLine();
+
+            int choice = -1;
+            while (true) {
+                try {
+                    System.out.print("Enter choice: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    sc.nextLine(); // clear invalid input
+                }
+            }
 
             switch (choice) {
                 case 1:
@@ -208,14 +253,34 @@ public class ComicBookStoreSystem {
                     break;
                 case 3:
                     inventoryManager.displayAll(comicManager);
-                    System.out.print("Enter Stock ID to update: ");
-                    int id = sc.nextInt(); sc.nextLine();
+                    int id = -1;
+                    while (true) {
+                        try {
+                            System.out.print("Enter Stock ID to update: ");
+                            id = sc.nextInt();
+                            sc.nextLine();
+                            break;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                            sc.nextLine(); // clear invalid input
+                        }
+                    }
                     inventoryManager.update(id, sc);
                     break;
                 case 4:
                     inventoryManager.displayAll(comicManager);
-                    System.out.print("Enter Stock ID to delete: ");
-                    int deleteId = sc.nextInt(); sc.nextLine();
+                    int deleteId = -1;
+                    while (true) {
+                        try {
+                            System.out.print("Enter Stock ID to delete: ");
+                            deleteId = sc.nextInt();
+                            sc.nextLine();
+                            break;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                            sc.nextLine(); // clear invalid input
+                        }
+                    }
                     inventoryManager.delete(deleteId);
                     System.out.println("Deleted successfully!");
                     break;
@@ -251,19 +316,37 @@ public class ComicBookStoreSystem {
             System.out.println("3. Remove Item from Cart");
             System.out.println("4. Checkout");
             System.out.println("5. Exit");
-            System.out.print("What would you like to do? ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+
+            int choice = -1;
+            while (true) {
+                try {
+                    System.out.print("What would you like to do? ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    sc.nextLine(); // clear invalid input
+                }
+            }
 
             switch(choice) {
                 case 1:
                     System.out.print("Enter Comic ID or Title: ");
                     String comicInput = sc.nextLine();
 
-                    System.out.print("Enter the Amount/Quantity: ");
-
-                    int qty = sc.nextInt();
-                    sc.nextLine();
+                    int qty = -1;
+                    while (true) {
+                        try {
+                            System.out.print("Enter the Amount/Quantity: ");
+                            qty = sc.nextInt();
+                            sc.nextLine();
+                            break;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                            sc.nextLine(); // clear invalid input
+                        }
+                    }
 
                     purchaseManager.addOrder(comicInput, qty);
                     break;
