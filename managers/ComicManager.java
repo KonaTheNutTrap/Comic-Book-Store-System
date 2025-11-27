@@ -155,6 +155,17 @@ public class ComicManager extends EntityManager<Comic> {
     }
 
     /**
+     * Gets the price of a comic by its title.
+     *
+     * @param title The title of the comic to search for
+     * @return The price of the comic if found, -1.0 if not found
+     */
+    public double getPriceByTitle(String title) {
+        Comic comic = findByName(title);
+        return comic != null ? comic.getPrice() : -1.0;
+    }
+
+    /**
      * Interactive method to add a new comic to the collection.
      * Prompts the user for comic details and creates a new Comic instance.
      * Automatically generates the next available ID and persists the changes.
