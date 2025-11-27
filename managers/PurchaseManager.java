@@ -1,6 +1,7 @@
 package managers;
 import entities.Comic;
 import entities.Order;
+import entities.Stock;
 
 import java.util.*;
 
@@ -10,6 +11,7 @@ import java.util.*;
 public class PurchaseManager extends EntityManager<Order> {
     ArrayList<Order> cart = new ArrayList<>();
     ComicManager comicManager;
+
 
     //Abstract methods that must be implemented because of inheriting from a abstract class
     @Override
@@ -34,7 +36,8 @@ public class PurchaseManager extends EntityManager<Order> {
     public PurchaseManager(String filename, ComicManager comicManager) {
          
         super(filename);
-        this.comicManager = comicManager; 
+        this.comicManager = comicManager;
+         
     }
 
 
@@ -56,7 +59,11 @@ public class PurchaseManager extends EntityManager<Order> {
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
-    }
+    } /*else {
+        System.out.println("I am sorry but we do not have the sufficient stock for your purchase.");
+    }*/
+    
+
 
 
 
@@ -113,6 +120,7 @@ public class PurchaseManager extends EntityManager<Order> {
         for (Order order : cart) {
             System.out.println("===Receipt===");
             System.out.println(order.toString());
+            total += order.getComic().getPrice() * order.getQuantity();
             add(order);
         }
     }

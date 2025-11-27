@@ -1,4 +1,5 @@
 package managers;
+import entities.Comic;
 import entities.Stock;
 import java.util.*;
 
