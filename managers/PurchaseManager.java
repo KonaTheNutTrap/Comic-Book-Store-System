@@ -1,6 +1,7 @@
 package managers;
 import entities.Comic;
 import entities.Order;
+import entities.Stock;
 
 import java.util.*;
 
@@ -10,6 +11,7 @@ import java.util.*;
 public class PurchaseManager extends EntityManager<Order> {
     ArrayList<Order> cart = new ArrayList<>();
     ComicManager comicManager;
+
 
     //Abstract methods that must be implemented because of inheriting from a abstract class
     @Override
@@ -34,15 +36,24 @@ public class PurchaseManager extends EntityManager<Order> {
     public PurchaseManager(String filename, ComicManager comicManager) {
          
         super(filename);
-        this.comicManager = comicManager; 
+        this.comicManager = comicManager;
+         
     }
 
 
 
     public void addOrder(String comicTitle, int quantity) {
         Comic comic;
-        
         comic = comicManager.findByName(comicTitle);
+        
+      /*   Stock stock;
+
+
+        if (stock.getQuantity() < quantity) {
+        comic = comicManager.findByName(comicTitle);
+        stock = */
+
+
         
         if (comic == null) {
             System.out.println("Comic not found!");
@@ -52,7 +63,11 @@ public class PurchaseManager extends EntityManager<Order> {
             cart.add(newOrder);
             System.out.println("Added to cart!");
         }
-    }
+    } /*else {
+        System.out.println("I am sorry but we do not have the sufficient stock for your purchase.");
+    }*/
+    
+
 
 
 
@@ -86,20 +101,22 @@ public class PurchaseManager extends EntityManager<Order> {
 
         }
 
+    
+
 
     public void checkout() {
-
-
+        double total = 0.0;
 
         for (Order order : cart) {
             System.out.println("===Receipt===");
             System.out.println(order.toString());
+            total += order.getComic().getPrice() * order.getQuantity();
             add(order);
             
-            
+             
         }      
-
-
+        System.out.println("Total comes out to:  " + total);
+        cart.clear();
 
     }
 
