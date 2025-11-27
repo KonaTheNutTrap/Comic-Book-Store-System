@@ -42,26 +42,22 @@ public class PurchaseManager extends EntityManager<Order> {
 
 
 
-    public void addOrder(String comicTitle, int quantity) {
+    public void addOrder(String comicInput, int quantity) {
         Comic comic;
-        comic = comicManager.findByName(comicTitle);
-        
-      /*   Stock stock;
 
+        comic = comicManager.findByIdOrName(comicInput);
 
-        if (stock.getQuantity() < quantity) {
-        comic = comicManager.findByName(comicTitle);
-        stock = */
-
-
-        
         if (comic == null) {
             System.out.println("Comic not found!");
             return;
-        } else { 
+        }
+
+        try {
             Order newOrder = new Order(comic, quantity);
             cart.add(newOrder);
             System.out.println("Added to cart!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     } /*else {
         System.out.println("I am sorry but we do not have the sufficient stock for your purchase.");
@@ -95,31 +91,37 @@ public class PurchaseManager extends EntityManager<Order> {
             return;
         } else {
 
-        cart.removeIf(o-> o.getComic().getTitle().equalsIgnoreCase(c));
+        // Try to parse as ID, else remove by title
+        boolean removed = false;
+        try {
+            int id = Integer.parseInt(c.trim());
+            removed = cart.removeIf(o -> o.getComic().getId() == id);
+        } catch (NumberFormatException e) {
+            removed = cart.removeIf(o -> o.getComic().getTitle().equalsIgnoreCase(c.trim()));
+        }
 
+        if (removed) {
+            System.out.println("Item removed from cart!");
+        } else {
+            System.out.println("Item not found in cart!");
         }
 
         }
 
-    
+        }
 
 
     public void checkout() {
-        double total = 0.0;
+        if (cart.isEmpty()) {
+            System.out.println("Cart is empty. Nothing to checkout.");
+            return;
+        }
 
         for (Order order : cart) {
             System.out.println("===Receipt===");
             System.out.println(order.toString());
             total += order.getComic().getPrice() * order.getQuantity();
             add(order);
-            
-             
-        }      
-        System.out.println("Total comes out to:  " + total);
-        cart.clear();
-
+        }
     }
-
-
-
 }

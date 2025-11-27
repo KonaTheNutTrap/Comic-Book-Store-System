@@ -127,10 +127,16 @@ public class Comic {
     
     /**
      * Sets the publication year of the comic.
-     * 
+     *
      * @param year The new publication year for the comic
+     * @throws IllegalArgumentException if year is out of reasonable range
      */
-    public void setYear(int year) { this.year = year; }
+    public void setYear(int year) {
+        if (year < 1800 || year > java.time.Year.now().getValue() + 5) {
+            throw new IllegalArgumentException("Year must be between 1800 and " + (java.time.Year.now().getValue() + 5));
+        }
+        this.year = year;
+    }
 
     /**
      * Converts the comic to a string representation for file storage.

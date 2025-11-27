@@ -10,7 +10,7 @@ public class Order {
 
     public Order (Comic comic, int quantity) {
         this.comic = comic;
-        this.quantity = quantity;
+        setQuantity(quantity);
     }
 
     public int getQuantity() {
@@ -26,6 +26,9 @@ public class Order {
     }
 
     public void setQuantity(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
         this.quantity = quantity;
     }
 

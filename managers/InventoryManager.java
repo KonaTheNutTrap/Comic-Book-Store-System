@@ -139,19 +139,27 @@ public class InventoryManager extends EntityManager<Stock> {
     /**
      * Interactive method to add a new stock record to the collection.
      * Prompts the user for stock details and creates a new Stock instance.
-     * Stock ID must equal comic ID 
+     * Stock ID must equal comic ID
      *
      * @param sc Scanner for reading user input
+     * @param comicManager The ComicManager instance to look up comic details
      */
-    public void addStock(Scanner sc) {
-        System.out.print("Enter comic ID: ");
-        int comicId = sc.nextInt();
-        sc.nextLine(); 
+    public void addStock(Scanner sc, ComicManager comicManager) {
+        System.out.print("Enter comic ID or title: ");
+        String input = sc.nextLine();
+
+        // Find comic by ID or title
+        entities.Comic comic = comicManager.findByIdOrName(input);
+        if (comic == null) {
+            System.out.println("Error: Comic not found with ID or title: " + input);
+            return;
+        }
+        int comicId = comic.getId();
 
         // Check if stock already exists for this comic
         if (findByComicId(comicId) != null) {
-            System.out.println("Error: Stock record already exists for comic ID " + comicId +
-                             ". Each comic can have only one stock record.");
+            System.out.println("Error: Stock record already exists for comic '" + comic.getTitle() + "' (ID " + comicId +
+                             "). Each comic can have only one stock record.");
             return;
         }
 
@@ -298,7 +306,7 @@ public class InventoryManager extends EntityManager<Stock> {
 
     /**
      * Checks if there is sufficient stock for a specific comic.
-     * 
+     *
      * @param comicId The comic ID to check
      * @param requiredQuantity The quantity needed
      * @return true if sufficient stock exists, false otherwise
@@ -307,4 +315,44 @@ public class InventoryManager extends EntityManager<Stock> {
         int currentStock = getStockQuantity(comicId);
         return currentStock >= requiredQuantity;
     }
+
+    /**
+     * Displays a dashboard showing only low stock alerts (quantity <= 10).
+     * This method requires access to a ComicManager to look up comic names.
+     *
+     * @param comicManager The ComicManager instance to look up comic details
+     */
+    public void displayLowStockDashboard(ComicManager comicManager) {
+        List<Stock> lowStockItems = new ArrayList<>();
+        for (Stock stock : getAll()) {
+            if (stock.getQuantity() <= 10) {
+                lowStockItems.add(stock);
+            }
+        }
+
+        System.out.println("\n=== DASHBOARD ===");
+        if (lowStockItems.isEmpty()) {
+            System.out.println("All stock levels are adequate. No low stock alerts.");
+            return;
+        }
+
+        System.out.println("The following comics are low on stock (quantity <= 10):");
+        System.out.println();
+
+        for (Stock stock : lowStockItems) {
+            String comicName = "Unknown Comic";
+            // Look up comic name using comic ID
+            entities.Comic comic = comicManager.findById(stock.getComicId());
+            if (comic != null) {
+                comicName = comic.getTitle();
+            }
+            System.out.println("*** LOW STOCK ALERT ***");
+            System.out.println("Comic: " + comicName + " (ID: " + stock.getComicId() + ")");
+            System.out.println("Current Stock: " + stock.getQuantity());
+            System.out.println();
+        }
+
+        System.out.println("Total low stock items: " + lowStockItems.size());
+    }
 }
+    
